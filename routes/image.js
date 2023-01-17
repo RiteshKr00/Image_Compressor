@@ -77,6 +77,10 @@ router.get("/getImage/:id", imageUpload, async (req, res) => {
     const Id = req.params.id;
     const image = await Image.findByPk(Id);
     // console.log(image.dataValues.image);
+    if (!image)
+      return res
+        .status(404)
+        .json({ message: "No Image found with given Link" });
     res.set({
       "Content-Type": "image/png",
       "Content-Disposition": "attachment; filename=image.png",

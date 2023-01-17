@@ -32,8 +32,8 @@ app.use((err, req, res, next) => {
 // Routes
 app.use("/api/v1/image", imageRoutes);
 
-app.get("/", async (_req, res) => {
-  return res.status(200).send("API works");
+app.get("/", async (req, res) => {
+  return res.status(200).json({ message: "API works" });
 });
 
 app.listen(process.env.PORT || PORT, () => {
