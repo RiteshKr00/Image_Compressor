@@ -5,12 +5,16 @@ const path = require("path");
 const fs = require("fs");
 const Image = require("../models/imageModel");
 const imageUpload = require("../utils/fileUpload");
+const RateLimit = require("../models/rateLimitingModel");
+const rateLimit = require("../middlewares/rateLimit");
 
-router.post("/compress", imageUpload, async (req, res) => {
+router.post("/compress", rateLimit, imageUpload, async (req, res) => {
   try {
     if (req.file == undefined) {
       return res.json({ message: `You must select a file.` });
     }
+    const compressedPercent = req.body.compressPercent;
+
     const imgType = req.file.mimetype === "image/jpeg" ? "jpeg" : "png";
     /*M1 store compressed image temp to newFilePath to upload it at cloudinary
     const newFilePath = path.join(
@@ -45,18 +49,33 @@ router.post("/compress", imageUpload, async (req, res) => {
     } else {
       buffer = await sharp(req.file.buffer).png({ quality: 50 }).toBuffer();
     }
-    const createImage = await Image.create({
+    const imageData = {
+      originalSize: req.file.size,
+      compressedSize: req.file.size / 2,
+      compressedPercent,
+      status: "success",
       image: buffer,
-    });
-    res.status(200).json({ message: "success" });
+    };
+
+    const createImage = await Image.create(imageData);
+    const compressedImageDetail = {
+      status: createImage.status,
+      downloadLink: `${process.env.BASE_URL}/api/v1/image/getImage/${createImage.id}`,
+      compressionPercent: createImage.compressedPercent,
+      compressedSize: createImage.compressedSize,
+      originalSize: createImage.originalSize,
+    };
+
+    res.status(200).json({ message: "success", compressedImageDetail });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ err: error.message });
   }
 });
-router.get("/getImage", imageUpload, async (req, res) => {
+router.get("/getImage/:id", imageUpload, async (req, res) => {
   try {
-    const image = await Image.findByPk(3);
+    const Id = req.params.id;
+    const image = await Image.findByPk(Id);
     // console.log(image.dataValues.image);
     res.set({
       "Content-Type": "image/png",

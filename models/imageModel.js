@@ -7,14 +7,6 @@ const Image = createDB.define("image", {
     autoIncrement: true,
     type: DataTypes.INTEGER,
   },
-  ip: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  timestamp: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
   originalSize: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -23,13 +15,13 @@ const Image = createDB.define("image", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  compressedPercent: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   status: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  downloadLink: {
-    type: DataTypes.STRING,
-    allowNull: true,
   },
   image: {
     type: DataTypes.BLOB("long"),
