@@ -60,7 +60,7 @@ router.post("/compress", rateLimit, imageUpload, async (req, res) => {
     const createImage = await Image.create(imageData);
     const compressedImageDetail = {
       status: createImage.status,
-      downloadLink: `${process.env.BASE_URL}/api/v1/image/getImage/${createImage.id}`,
+      downloadLink: `${process.env.BASE_URL}api/v1/image/getImage/${createImage.id}`,
       compressionPercent: createImage.compressedPercent,
       compressedSize: createImage.compressedSize,
       originalSize: createImage.originalSize,

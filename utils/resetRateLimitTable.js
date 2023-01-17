@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 const RateLimit = require("../models/rateLimitingModel");
-const Image = requre("../models/imageModel");
+const Image = require("../models/imageModel");
 
 const resetRateLimit = () => {
   setInterval(() => {

@@ -2,11 +2,10 @@ const express = require("express");
 const { connectToDB } = require("./config/db");
 const app = express();
 const path = require("path");
-
+require("dotenv").config();
 // const userRoutes = require("./routes/userRoutes");
 const imageRoutes = require("./routes/image");
 const resetRateLimit = require("./utils/resetRateLimitTable");
-
 const PORT = 3000;
 
 connectToDB();
@@ -38,5 +37,5 @@ app.get("/", async (_req, res) => {
 });
 
 app.listen(process.env.PORT || PORT, () => {
-  console.log(`Server is running at port:${PORT}`);
+  console.log(`Server is running at port:${process.env.PORT}`);
 });
